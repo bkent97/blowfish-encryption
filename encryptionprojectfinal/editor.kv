@@ -1,0 +1,169 @@
+#:kivy 1.1.0
+
+Root:
+#    text_input: text_input
+
+    BoxLayout:
+        orientation: 'vertical'
+        BoxLayout:
+            size_hint_y: None
+            height: 150
+            Label:
+                text: "Welcome to Brandon's encryption/decryption app. Make sure your key is between 4 and 56 characters. Keep in mind you will not be able to decrypt a file without the same key you used to encrypt it."
+                text_size: root.width, None
+                halign: 'left'
+                valign: 'middle'
+                size: self.texture_size
+
+        BoxLayout:
+            size_hint_y: None
+            height: 120
+            Button:
+                text: 'Encrypt'
+                on_release: root.update_key(text_input.text), root.show_encrypt()
+            Button:
+                text: 'Decrypt'
+                on_release: root.update_key(text_input.text), root.show_decrypt()
+
+        BoxLayout:
+            size_hint_y: None
+            height: 120
+            Label:
+                id: label1
+                text: 'Please enter your encryption key in the text box below:'
+                color: 1, 0, 0, 1
+                text_size: root.width, None
+                halign: 'center'
+                valign: 'middle'
+                size: self.texture_size
+
+        BoxLayout:
+            size_hint_y: None
+            height: 90
+            TextInput:
+                id: text_input
+                text: ''
+            Button:
+                text: 'Enter'
+                on_release: root.update_key(text_input.text)
+ #           RstDocument:
+  #              text: text_input.text
+   #             show_errors: True
+
+<ConfirmationDDialog>:
+    BoxLayout:
+        pos: root.pos
+        orientation: "vertical"
+        BoxLayout:
+            height: 15
+            Label:
+                text: "Decrypting a file that is not yet encrypted can result in garbage values. This file appears to not yet be encrypted so the operation was stopped, if you believe this is a mistake click 'Continue' to flag the file as encrypted."
+                color: 1, 0, 0, 1
+                text_size: root.width, None
+                halign: 'center'
+                valign: 'middle'
+                size: self.texture_size
+
+        BoxLayout:
+            height: 15
+            Button:
+                text: "Continue"
+                on_release: root.confirm_decrypt()
+            Button:
+                text: "Cancel"
+                on_release: root.cancel()
+
+
+<ConfirmationEDialog>:
+    BoxLayout:
+        pos: root.pos
+        orientation: "vertical"
+        BoxLayout:
+            height: 15
+            Label:
+                text: "Encrypting a file that is already encrypted can result in garbage values. This file has been identified as already encrypted so the operaton was stopped, if you believe this is a mistake click 'Continue' to unflag the file."
+                color: 1, 0, 0, 1
+                text_size: root.width, None
+                halign: 'center'
+                valign: 'middle'
+                size: self.texture_size
+
+        BoxLayout:
+            height: 15
+            Button:
+                text: "Continue"
+                on_release: root.confirm_encrypt()
+            Button:
+                text: "Cancel"
+                on_release: root.cancel()
+
+<KeyDialog>:
+    BoxLayout:
+        pos: root.pos
+        orientation: "vertical"
+        BoxLayout:
+            height: 15
+            Label:
+                text: "Make sure you've entered a key that is between 4 and 56 characters"
+                color: 1, 0, 0, 1
+                text_size: root.width, None
+                halign: 'center'
+                valign: 'middle'
+                size: self.texture_size
+
+        BoxLayout:
+            height: 15
+            Button:
+                text: "OK"
+                on_release: root.cancel()
+
+<EncryptDialog>:
+    BoxLayout:
+        size: root.size
+        pos: root.pos
+        orientation: "vertical"
+        FileChooser:
+            id: fc
+            FileChooserIconLayout
+            FileChooserListLayout
+
+        BoxLayout:
+            size_hint_y: None
+            height: 60
+            Button:
+                text: "Cancel"
+                on_release: root.cancel()
+
+            Button:
+                text: "Change File View"
+                on_release: fc.view_mode = 'list' if fc.view_mode == 'icon' else 'icon'
+
+            Button:
+                text: "Encrypt"
+                on_release: root.encrypt(fc.path, fc.selection)
+
+<DecryptDialog>:
+#    text_input: text_input
+    BoxLayout:
+        size: root.size
+        pos: root.pos
+        orientation: "vertical"
+        FileChooser:
+            id: fc
+            FileChooserIconLayout
+            FileChooserListLayout
+ 
+        BoxLayout:
+            size_hint_y: None
+            height: 60
+            Button:
+                text: "Cancel"
+                on_release: root.cancel()
+
+            Button:
+                text: "Change File View"
+                on_release: fc.view_mode = 'list' if fc.view_mode == 'icon' else 'icon'
+
+            Button:
+                text: "Decrypt"
+                on_release: root.decrypt(fc.path, fc.selection)
